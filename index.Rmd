@@ -1,0 +1,53 @@
+---
+title : Shiny Project for Developing Data Product Course
+subtitle: Predicting Miles Per Gallon
+author: PeterH8
+framework: io2012
+highlighter: highlight.js
+hitheme: tomorrow
+widgets: [mathjax]
+mode: selfcontained
+---
+
+## Problem Definition and Approach
+
+1. Used the `mtcars` dataset in R `datasets` 
+2. Trained a linear model for predicting `mpg` (Miles/(US) gallon) from other variables
+3. Did model selection by applying stepAIC on initial model `mpg ~ .`
+4. Selected `mpg ~ wt + qsec + am`.
+5. Reporeted summary of fitted model.
+6. User providing values for `wt`, `qsec`, and `am` to do prediction.
+
+---
+
+## Model Selection
+
+```{r modelselection, echo=TRUE, cache=TRUE, results='hide'}
+library(MASS)
+step <- stepAIC(fit6, direction="backward");
+```
+```{r modelselectionanova, echo=TRUE, cache=TRUE}
+print(step$anova)
+```
+
+---
+
+## Retrain selected Model
+
+```{r retrainining, echo=TRUE, cache=TRUE, messages=FALSE}
+fit <- lm(mpg ~ wt + qsec + am, data=mtcars);
+print(summary(fit))
+```
+
+---
+
+## Example of Prediction and Pointers
+
+```{r prediction, echo=TRUE, cache=TRUE}
+mpgPrediction <- function(df) predict(fit, newdata=df)[[1]]
+cat("Prediction of (wt=3.3, qsec=17.7, am = 'Automatic'):", 
+    mpgPrediction(data.frame(wt=3.3, qsec=17.7, am=0)))
+```
+1. The Application can be found [here](http://peterh8.shinyapps.io/Course_Project/).
+2. The R code can be found at [my github repository](https://github.com/PeterH8/DevDataProd_ShinyProject).
+
